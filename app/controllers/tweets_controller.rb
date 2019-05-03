@@ -1,5 +1,6 @@
 class TweetsController < ApplicationController
   
+  
     get '/tweets/new' do
       @users = User.all
       erb :'/tweets/new' 
@@ -13,13 +14,13 @@ class TweetsController < ApplicationController
   
     get '/tweets/:id' do
       @tweet = Tweet.find(params[:id])
-      erb :'/tweets/show'
+      erb :'/tweets/show_tweet'
     end
     
     get '/tweets/:id/edit' do
       @tweet = Tweet.find(params[:id])
       @users = User.all
-      erb :'/tweets/edit'
+      erb :'/tweets/edit_tweet'
     end 
     
     patch '/tweets/:id' do
