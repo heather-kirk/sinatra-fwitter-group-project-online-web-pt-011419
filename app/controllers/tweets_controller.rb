@@ -13,21 +13,33 @@ class TweetsController < ApplicationController
     end 
   
     get '/tweets/:id' do
-      @tweet = Tweet.find(params[:id])
-      erb :'/tweets/show_tweet'
+      if Helpers.logged_in?
+        @tweet = Tweet.find(params[:id])
+        erb :'/tweets/show_tweet'
+      else 
+        redirect '/users/login'
+      end 
     end
     
     get '/tweets/:id/edit' do
-      @tweet = Tweet.find(params[:id])
-      @users = User.all
-      erb :'/tweets/edit_tweet'
+       if Helpers.logged_in?
+         @tweet = Tweet.find(params[:id])
+         @users = User.all
+         erb :'/tweets/edit_tweet'
+       else 
+         redirect '/users/login'
+       end 
     end 
     
     patch '/tweets/:id' do
-      @tweet = Tweet.find(params[:id])
-      @tweet.update(params["tweet"])
-      @tweet.save
+      if Helpers.logged_in?
+        @tweet = Tweet.find(params[:id])
+        @tweet.update(params["tweet"])
+        @tweet.save
       redirect "tweets/#{@tweet_id}"
+    else 
+        redirect '/users/login'
+      end 
     end 
     
     delete '/tweets/:id/delete' do
