@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     end 
     
      @user = User.new(:username => params[:username], :password => params[:password])
-    if user.save && !user.username.empty?
+    if @user.save && !@user.username.empty?
       redirect '/tweets'
     else 
       redirect '/users/signup'
@@ -25,22 +25,28 @@ class UsersController < ApplicationController
   
   get '/login' do
     if !logged_in?
-      erb :login 
+      erb :'/users/login' 
     else
       redirect '/tweets'
     end 
   end 
   
   post '/login' do
-     @user = User.new(:username => params[:username], :password => params[:password])
+     user = User.new(:username => params[:username], :password => params[:password])
      if user.save && user.authenticate(params[:password])
        session[:user_id] = user.id
+       redirect '/tweets'
      else 
        redirect '/users/login'
      end
   end 
   
   get '/logout' do
+    if logged_in?
     session.clear 
+    redirect '/login'
+  else 
+    redirect '/signup'
+  end 
   end 
 end 

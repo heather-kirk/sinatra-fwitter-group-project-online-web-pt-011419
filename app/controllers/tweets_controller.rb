@@ -1,11 +1,23 @@
 class TweetsController < ApplicationController
   
-  
+    get '/tweets' do
+      if logged_in?
+      @tweets = Tweet.all
+      erb :'tweets/tweets'
+    else
+      redirect to '/login'
+    end
+   end 
+   
     get '/tweets/new' do
-      @users = User.all
-      erb :'/tweets/new' 
+      if logged_in?
+        @users = User.all
+        erb :'/tweets/new'
+      else
+        redirect '/login'
     end 
-  
+   end 
+   
     post '/tweets' do
      @tweet = Tweet.create(params[:tweet])
       @tweet.save 
@@ -22,7 +34,7 @@ class TweetsController < ApplicationController
     end
     
     get '/tweets/:id/edit' do
-       if Helpers.logged_in?
+       if logged_in?
          @tweet = Tweet.find(params[:id])
          @users = User.all
          erb :'/tweets/edit_tweet'
@@ -43,8 +55,12 @@ class TweetsController < ApplicationController
     end 
     
     delete '/tweets/:id/delete' do
+      if logged_in?
       @tweet = Tweet.find(params[:id])
       @tweet.delete
       redirect '/tweets'
+    else 
+      redirect '/login'
+    end 
     end 
   end  
