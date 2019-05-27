@@ -1,3 +1,4 @@
+require './config/environment'
 class TweetsController < ApplicationController
   
     get '/tweets' do
@@ -44,12 +45,12 @@ class TweetsController < ApplicationController
     end 
     
     patch '/tweets/:id' do
-      if Helpers.logged_in?
+      if logged_in?
         @tweet = Tweet.find(params[:id])
         @tweet.update(params["tweet"])
         @tweet.save
-      redirect "tweets/#{@tweet_id}"
-    else 
+        redirect "tweets/#{@tweet_id}"
+      else 
         redirect '/users/login'
       end 
     end 
